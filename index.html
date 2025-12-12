@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Estudo: Comunicação Técnica para TI - CPU PE 2025</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Palette and Design Config -->
+    <!-- Chosen Palette: "Executive Neutral" -->
+    <!-- Background: #F9FAFB (Cool Gray 50) -->
+    <!-- Text: #1F2937 (Cool Gray 800) -->
+    <!-- Primary: #0F766E (Teal 700) -->
+    <!-- Secondary: #D97706 (Amber 600) -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+            color: #1F2937;
+        }
+        h1, h2, h3, h4, .serif-font {
+            font-family: 'Merriweather', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 350px;
+            max-height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .glossary-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .glossary-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .glossary-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .glossary-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .tab-active {
+            border-left: 4px solid #0F766E;
+            background-color: #F3F4F6;
+            color: #0F766E;
+            font-weight: 600;
+        }
+        .tab-inactive {
+            border-left: 4px solid transparent;
+            color: #4B5563;
+        }
+        .tab-inactive:hover {
+            background-color: #F9FAFB;
+            color: #111827;
+        }
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .content-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .print-only {
+            display: none;
+        }
+        /* Quiz specific styles */
+        .option-btn {
+            transition: all 0.2s;
+        }
+        .option-correct {
+            background-color: #d1fae5 !important;
+            border-color: #059669 !important;
+            color: #064e3b !important;
+        }
+        .option-wrong {
+            background-color: #fee2e2 !important;
+            border-color: #dc2626 !important;
+            color: #7f1d1d !important;
+        }
+        .sticky-score {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Flashcard CSS */
+        .flashcard-scene {
+            perspective: 1000px;
+            height: 300px;
+        }
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flashcard.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .flashcard-front {
+            background-color: #ffffff;
+            border: 2px solid #e5e7eb;
+            color: #1f2937;
+        }
+        .flashcard-back {
+            background-color: #0f766e;
+            color: white;
+            transform: rotateY(180deg);
+            border: 2px solid #0f766e;
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background-color: white; }
+            .content-section { display: block !important; }
+            .h-screen { height: auto !important; }
+            .overflow-y-auto { overflow: visible !important; }
+        }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden text-sm md:text-base">
+
+    <!-- Navigation Sidebar -->
+    <aside class="w-64 bg-white shadow-lg flex-col hidden md:flex no-print z-10">
+        <div class="p-6 border-b border-gray-100">
+            <h1 class="text-xl font-bold text-teal-800 leading-tight">CPU PE 2025</h1>
+            <p class="text-xs text-gray-500 mt-1 uppercase tracking-wide">Analista de TI</p>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1">
+                <li><button onclick="nav('dashboard')" id="nav-dashboard" class="w-full text-left px-6 py-3 tab-active transition-colors">Visão Geral</button></li>
+                <li><button onclick="nav('module1')" id="nav-module1" class="w-full text-left px-6 py-3 tab-inactive transition-colors">Módulo 1: Fundamentos</button></li>
+                <li><button onclick="nav('module2')" id="nav-module2" class="w-full text-left px-6 py-3 tab-inactive transition-colors">Módulo 2: Documentos Técnicos</button></li>
+                <li><button onclick="nav('module3')" id="nav-module3" class="w-full text-left px-6 py-3 tab-inactive transition-colors">Módulo 3: Interação Humana</button></li>
+                <li><button onclick="nav('glossary')" id="nav-glossary" class="w-full text-left px-6 py-3 tab-inactive transition-colors">Glossário Técnico</button></li>
+                <!-- NEW FLASHCARD LINK -->
+                <li><button onclick="nav('flashcards')" id="nav-flashcards" class="w-full text-left px-6 py-3 tab-inactive transition-colors font-medium text-indigo-700">Flashcards de Memorização</button></li>
+                <li><button onclick="nav('simulado')" id="nav-simulado" class="w-full text-left px-6 py-3 tab-inactive transition-colors font-semibold text-amber-700">Simulado (50 Questões)</button></li>
+            </ul>
+        </nav>
+
+        <div class="p-4 bg-gray-50 border-t border-gray-100">
+            <p class="text-xs text-center text-gray-400">Desenvolvido para Estudo</p>
+        </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <div class="md:hidden fixed w-full bg-white shadow z-20 top-0 left-0 no-print flex justify-between items-center px-4 py-3">
+        <span class="font-bold text-teal-800">CPU PE 2025: Com. Técnica</span>
+        <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-gray-600 focus:outline-none">
+            <span class="text-2xl">☰</span>
+        </button>
+    </div>
+    
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobile-menu" class="hidden fixed top-12 left-0 w-full bg-white shadow-lg z-10 md:hidden no-print border-t">
+         <ul class="flex flex-col">
+            <li><button onclick="nav('dashboard')" class="w-full text-left px-4 py-3 border-b">Visão Geral</button></li>
+            <li><button onclick="nav('module1')" class="w-full text-left px-4 py-3 border-b">Fundamentos</button></li>
+            <li><button onclick="nav('module2')" class="w-full text-left px-4 py-3 border-b">Documentos Técnicos</button></li>
+            <li><button onclick="nav('module3')" class="w-full text-left px-4 py-3 border-b">Interação Humana</button></li>
+            <li><button onclick="nav('glossary')" class="w-full text-left px-4 py-3 border-b">Glossário</button></li>
+            <li><button onclick="nav('flashcards')" class="w-full text-left px-4 py-3 border-b text-indigo-700 font-medium">Flashcards</button></li>
+            <li><button onclick="nav('simulado')" class="w-full text-left px-4 py-3 text-amber-700 font-bold">Simulado (50 Questões)</button></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 h-full overflow-y-auto p-4 md:p-8 pt-16 md:pt-8 scroll-smooth" id="main-content">
+        
+        <!-- DASHBOARD VIEW -->
+        <section id="dashboard" class="content-section active max-w-4xl mx-auto">
+            <header class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Plano de Estudo: Comunicação Técnica</h2>
+                <p class="text-lg text-gray-600 font-serif">Preparação para Analista em Gestão de TIC - Estado de Pernambuco</p>
+            </header>
+
+            <!-- Intro Card -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                <h3 class="text-xl font-bold text-teal-700 mb-3">Contexto do Concurso</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Este documento digital serve como base de estudo para o subtema "Comunicação Técnica". 
+                    O papel do Analista Consultor exige não apenas habilidade técnica ("hard skills"), mas uma capacidade robusta de traduzir complexidade tecnológica para linguagem de negócio ("soft skills"), documentar incidentes com precisão jurídica e gerenciar expectativas de stakeholders.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <div class="bg-teal-50 p-4 rounded-lg border border-teal-100">
+                        <span class="block text-teal-800 font-semibold mb-1">Foco 1: Escrita Técnica</span>
+                        <p class="text-sm text-teal-700">Clareza, concisão, estrutura de pareceres, normas cultas e padronização (ABNT/ISO).</p>
+                    </div>
+                    <div class="bg-amber-50 p-4 rounded-lg border border-amber-100">
+                        <span class="block text-amber-800 font-semibold mb-1">Foco 2: Interação</span>
+                        <p class="text-sm text-amber-700">Negociação, gestão de conflitos, escuta ativa e comunicação em métodos ágeis.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization: Why this matters -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Relevância no Cotidiano do Analista</h3>
+                <p class="text-sm text-gray-600 mb-6">
+                    Estudos do PMI (Project Management Institute) indicam que a falha na comunicação é responsável por uma parcela significativa dos fracassos em projetos de TI. O gráfico abaixo ilustra a distribuição típica do tempo de um Analista de Gestão Sênior.
+                </p>
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-full md:w-1/2">
+                        <div class="chart-container h-64">
+                            <canvas id="chartTimeDist"></canvas>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 space-y-3">
+                        <div class="p-3 bg-gray-50 rounded border-l-4 border-blue-500">
+                            <h4 class="font-bold text-gray-800 text-sm">Comunicação (70-80%)</h4>
+                            <p class="text-xs text-gray-600">Reuniões, emails, relatórios, documentação e alinhamentos.</p>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded border-l-4 border-green-500">
+                            <h4 class="font-bold text-gray-800 text-sm">Análise Técnica (15-20%)</h4>
+                            <p class="text-xs text-gray-600">Diagnóstico, configuração e planejamento técnico isolado.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button onclick="nav('module1')" class="bg-teal-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-teal-800 transition shadow-lg">Iniciar Estudos &rarr;</button>
+            </div>
+        </section>
+
+        <!-- MODULE 1: FUNDAMENTOS -->
+        <section id="module1" class="content-section max-w-4xl mx-auto">
+            <header class="border-b border-gray-200 pb-4 mb-6">
+                <span class="text-sm font-bold text-amber-600 uppercase tracking-wider">Módulo 1</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-1">Fundamentos da Comunicação</h2>
+            </header>
+
+            <div class="prose max-w-none text-gray-700 leading-relaxed mb-8">
+                <p class="mb-4">
+                    A comunicação técnica não é apenas sobre transmitir dados; é sobre garantir que a informação chegue ao receptor sem ruídos e gere a ação ou entendimento esperado. No contexto governamental (PE), isso inclui também a observância aos princípios da administração pública: <strong>Legalidade, Impessoalidade, Moralidade, Publicidade e Eficiência (LIMPE)</strong>.
+                </p>
+            </div>
+
+            <!-- Visualization: Barriers -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-2">O Processo de Comunicação e seus Ruídos</h3>
+                <p class="text-sm text-gray-600 mb-6">
+                    O modelo clássico de Shannon-Weaver envolve Emissor, Receptor, Canal, Código e Mensagem. Em TI, os "ruídos" são frequentes. O gráfico abaixo detalha as barreiras mais comuns que o Analista deve mitigar.
+                </p>
+                <div class="chart-container">
+                    <canvas id="chartBarriers"></canvas>
+                </div>
+                <div class="mt-4 text-xs text-gray-500 text-center italic">Fonte: Adaptado de Robbins, S. P. (Comportamento Organizacional).</div>
+            </div>
+
+            <!-- Interactive Concepts -->
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Conceitos Chave (Clique para expandir)</h3>
+            <div class="space-y-3">
+                <details class="bg-white border border-gray-200 rounded-lg group">
+                    <summary class="font-semibold cursor-pointer p-4 list-none flex justify-between items-center group-hover:bg-gray-50">
+                        <span>1. Clareza e Concisão (Plain Language)</span>
+                        <span class="text-teal-600 text-xl font-bold group-open:rotate-180 transition-transform">↓</span>
+                    </summary>
+                    <div class="p-4 pt-0 text-gray-700 border-t border-gray-100 mt-2">
+                        <p class="mb-2"><strong>Definição:</strong> O uso de linguagem simples e direta, evitando o "tatiquês" desnecessário. O objetivo é reduzir a carga cognitiva do leitor.</p>
+                        <p class="mb-2"><strong>Exemplo Errado:</strong> "Houve uma intermitência na camada de transporte ocasionando latência elevada."</p>
+                        <p class="text-teal-700 font-medium"><strong>Exemplo Correto (para usuário):</strong> "Identificamos uma falha na conexão de rede que deixou o sistema lento momentaneamente."</p>
+                    </div>
+                </details>
+
+                <details class="bg-white border border-gray-200 rounded-lg group">
+                    <summary class="font-semibold cursor-pointer p-4 list-none flex justify-between items-center group-hover:bg-gray-50">
+                        <span>2. Impessoalidade no Serviço Público</span>
+                        <span class="text-teal-600 text-xl font-bold group-open:rotate-180 transition-transform">↓</span>
+                    </summary>
+                    <div class="p-4 pt-0 text-gray-700 border-t border-gray-100 mt-2">
+                        <p>Documentos técnicos não devem conter opiniões pessoais subjetivas ("eu acho", "sinto que"). Devem basear-se em fatos, logs, métricas e normas.</p>
+                        <ul class="list-disc pl-5 mt-2 space-y-1">
+                            <li>Use voz passiva analítica ou indeterminação do sujeito quando necessário focar no processo.</li>
+                            <li>Evite adjetivos emocionais (ex: "erro gravíssimo", "falha terrível"). Prefira classificações técnicas (ex: "incidente de severidade crítica").</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+            
+            <div class="mt-8 p-4 bg-amber-50 rounded border border-amber-200">
+                <h4 class="font-bold text-amber-800">Dica para a Prova</h4>
+                <p class="text-sm text-amber-900">Questões sobre comunicação frequentemente apresentam cenários onde o técnico usa jargão excessivo com um usuário leigo. A resposta correta sempre envolve <strong>adaptação da linguagem ao público-alvo</strong>.</p>
+            </div>
+        </section>
+
+        <!-- MODULE 2: DOCUMENTOS TÉCNICOS -->
+        <section id="module2" class="content-section max-w-4xl mx-auto">
+            <header class="border-b border-gray-200 pb-4 mb-6">
+                <span class="text-sm font-bold text-amber-600 uppercase tracking-wider">Módulo 2</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-1">Elaboração de Documentos</h2>
+            </header>
+
+            <p class="mb-6 text-gray-700">
+                A produção textual é uma competência central. Analisaremos os três principais artefatos exigidos no edital: <strong>Relatórios, Pareceres e Registros</strong>.
+            </p>
+
+            <!-- Comparative Table -->
+            <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200 mb-10">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-700 text-sm uppercase tracking-wide">
+                            <th class="p-4 font-bold border-b">Tipo</th>
+                            <th class="p-4 font-bold border-b">Objetivo Principal</th>
+                            <th class="p-4 font-bold border-b">Estrutura Típica</th>
+                            <th class="p-4 font-bold border-b">Tom</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm divide-y divide-gray-100">
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-4 font-semibold text-teal-700">Relatório Técnico</td>
+                            <td class="p-4">Registrar fatos, histórico de intervenções ou status de projeto. É descritivo.</td>
+                            <td class="p-4">Intro, Metodologia, Fatos/Dados, Conclusão.</td>
+                            <td class="p-4">Neutro, Descritivo.</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-4 font-semibold text-teal-700">Parecer Técnico</td>
+                            <td class="p-4">Subsidiar tomada de decisão. Opina sobre a viabilidade ou legalidade técnica.</td>
+                            <td class="p-4">Relatório, Fundamentação Técnica, Análise, Conclusão (Opinativa).</td>
+                            <td class="p-4">Argumentativo, Prescritivo.</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-4 font-semibold text-teal-700">Registro (Log)</td>
+                            <td class="p-4">Rastreabilidade e auditoria. Memória técnica imediata.</td>
+                            <td class="p-4">Data/Hora, Autor, Ação, Resultado.</td>
+                            <td class="p-4">Telegráfico, Objetivo.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Interactive Report Builder -->
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:p-8 mb-10">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Anatomia do Parecer Técnico</h3>
+                <p class="text-sm text-gray-600 mb-6">
+                    O Parecer é o documento mais complexo. Clique nas seções abaixo para entender o que deve constar em cada parte de um parecer técnico para aquisição de software ou contratação de serviço.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Steps Buttons -->
+                    <div class="space-y-2 flex flex-col">
+                        <button onclick="showParecerPart('part1')" class="text-left px-4 py-3 rounded border hover:bg-teal-50 hover:border-teal-300 focus:ring-2 focus:ring-teal-500 transition bg-white shadow-sm font-semibold text-gray-700">1. Ementa e Cabeçalho</button>
+                        <button onclick="showParecerPart('part2')" class="text-left px-4 py-3 rounded border hover:bg-teal-50 hover:border-teal-300 focus:ring-2 focus:ring-teal-500 transition bg-white shadow-sm font-semibold text-gray-700">2. Relatório (O Fato)</button>
+                        <button onclick="showParecerPart('part3')" class="text-left px-4 py-3 rounded border hover:bg-teal-50 hover:border-teal-300 focus:ring-2 focus:ring-teal-500 transition bg-white shadow-sm font-semibold text-gray-700">3. Fundamentação Técnica</button>
+                        <button onclick="showParecerPart('part4')" class="text-left px-4 py-3 rounded border hover:bg-teal-50 hover:border-teal-300 focus:ring-2 focus:ring-teal-500 transition bg-white shadow-sm font-semibold text-gray-700">4. Conclusão (O Voto)</button>
+                    </div>
+
+                    <!-- Content Display Area -->
+                    <div class="md:col-span-2 bg-gray-50 p-6 rounded-lg border border-gray-200 min-h-[250px] relative">
+                        <div id="part1" class="parecer-content">
+                            <h4 class="font-bold text-teal-800 mb-2">1. Ementa e Cabeçalho</h4>
+                            <p class="text-gray-700 mb-3">Identificação clara do assunto e dos interessados.</p>
+                            <div class="bg-white p-3 border border-gray-300 font-mono text-xs text-gray-600">
+                                PARECER TÉCNICO Nº 012/2025 - GTI/PE<br>
+                                ASSUNTO: Aquisição de licenças de software de BI.<br>
+                                INTERESSADO: Secretaria de Administração.<br>
+                                EMENTA: Tecnologia da Informação. Contratação de Software. Análise de compatibilidade. Viabilidade Técnica.
+                            </div>
+                        </div>
+                        <div id="part2" class="parecer-content hidden">
+                            <h4 class="font-bold text-teal-800 mb-2">2. Relatório (Histórico)</h4>
+                            <p class="text-gray-700 mb-3">Resumo sucinto da demanda. Não emite opinião ainda, apenas narra o que foi solicitado.</p>
+                            <div class="bg-white p-3 border border-gray-300 font-mono text-xs text-gray-600">
+                                "Trata-se de solicitação encaminhada pelo setor X, visando a contratação de ferramenta Y... O processo administrativo iniciou-se em..."
+                            </div>
+                        </div>
+                        <div id="part3" class="parecer-content hidden">
+                            <h4 class="font-bold text-teal-800 mb-2">3. Fundamentação Técnica</h4>
+                            <p class="text-gray-700 mb-3">O "coração" do parecer. Apresenta normas, benchmarks, testes realizados e alinhamento com o Plano Diretor de TI (PDTI).</p>
+                            <div class="bg-white p-3 border border-gray-300 font-mono text-xs text-gray-600">
+                                "A solução proposta atende aos requisitos não-funcionais estabelecidos na IN 01/202X. Comparando as soluções A, B e C, observa-se que..."
+                            </div>
+                        </div>
+                        <div id="part4" class="parecer-content hidden">
+                            <h4 class="font-bold text-teal-800 mb-2">4. Conclusão</h4>
+                            <p class="text-gray-700 mb-3">Posicionamento final explícito: Favorável ou Desfavorável, podendo incluir condicionantes.</p>
+                            <div class="bg-white p-3 border border-gray-300 font-mono text-xs text-gray-600">
+                                "Diante do exposto, este analista opina pelo DEFERIMENTO da contratação, recomendando, contudo, que seja exigido SLA de 99,9%..."
+                            </div>
+                        </div>
+                        <div id="parecer-placeholder" class="text-gray-400 flex items-center justify-center h-full">
+                            <p>Selecione uma seção à esquerda para ver detalhes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Practices List -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-gray-900">Boas Práticas de Redação Técnica</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-green-500">
+                        <strong class="block text-green-700 mb-1">Use:</strong>
+                        <ul class="list-disc list-inside text-gray-600 text-sm">
+                            <li>Frases curtas (ordem direta).</li>
+                            <li>Listas (bullets) para enumerações.</li>
+                            <li>Gráficos para dados complexos.</li>
+                            <li>Termos padronizados.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-red-500">
+                        <strong class="block text-red-700 mb-1">Evite:</strong>
+                        <ul class="list-disc list-inside text-gray-600 text-sm">
+                            <li>Gerundismo ("estaremos verificando").</li>
+                            <li>Ambiguidade ("o gestor falou com o técnico sobre seu erro" - erro de quem?).</li>
+                            <li>Excesso de voz passiva.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 3: INTERAÇÃO HUMANA -->
+        <section id="module3" class="content-section max-w-4xl mx-auto">
+            <header class="border-b border-gray-200 pb-4 mb-6">
+                <span class="text-sm font-bold text-amber-600 uppercase tracking-wider">Módulo 3</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-1">Comunicação com Equipes e Usuários</h2>
+            </header>
+
+            <!-- Plotly Visualization -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Matriz de Stakeholders (Poder x Interesse)</h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    Fundamental para definir *quem* deve receber *qual* tipo de comunicação. Usuários VIPs com alto poder exigem gestão próxima.
+                </p>
+                <!-- Chart Container for Plotly -->
+                <div id="plotlyStakeholder" class="chart-container" style="height: 400px;"></div>
+                <div class="mt-2 p-3 bg-gray-50 text-xs text-gray-600 rounded">
+                    <strong>Interpretação:</strong> Stakeholders no quadrante superior direito (Alto Poder/Alto Interesse) devem ser gerenciados de perto (reuniões presenciais, relatórios detalhados). Os do canto inferior esquerdo exigem apenas monitoramento básico.
+                </div>
+            </div>
+
+            <!-- Team Communication Section -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Comunicação em Equipes (Contexto Ágil)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-teal-50 p-5 rounded-lg border border-teal-100">
+                        <h4 class="font-bold text-teal-800 mb-2">Rituais Scrum/Kanban</h4>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li><strong>Daily:</strong> Comunicação síncrona, rápida (15min), foco em bloqueios. Não é para resolução técnica profunda.</li>
+                            <li><strong>Retrospectiva:</strong> Espaço seguro para feedback da equipe. Foco na melhoria do processo, não em culpar pessoas.</li>
+                            <li><strong>Review:</strong> Comunicação com o cliente/PO. Apresentação de resultados tangíveis.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg border border-gray-200">
+                        <h4 class="font-bold text-gray-800 mb-2">Comunicação Não-Violenta (CNV)</h4>
+                        <p class="text-sm text-gray-600 mb-3">Técnica essencial para gestão de conflitos em times multidisciplinares.</p>
+                        <ol class="list-decimal pl-4 space-y-1 text-sm text-gray-700">
+                            <li><strong>Observação:</strong> Fatos sem julgamento ("O servidor caiu 3x hoje").</li>
+                            <li><strong>Sentimento:</strong> Como isso afeta ("Fico preocupado com o SLA").</li>
+                            <li><strong>Necessidade:</strong> O que precisamos ("Precisamos de estabilidade").</li>
+                            <li><strong>Pedido:</strong> Ação concreta ("Podemos revisar o log juntos?").</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Desk Scenario Interaction -->
+            <div class="bg-white rounded-xl shadow-lg border-t-4 border-amber-500 p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Simulador de Atendimento (Service Desk)</h3>
+                <p class="text-sm text-gray-600 mb-4">Usuário irritado liga: <em>"Essa internet nunca funciona! Eu não consigo mandar meu email urgente! A TI é incompetente!"</em></p>
+                
+                <div id="scenario-options" class="space-y-3">
+                    <button onclick="resolveScenario(1)" class="w-full text-left p-3 border rounded hover:bg-gray-50 transition text-sm">
+                        A) "Senhor, a rede está com 99% de uptime. O problema deve ser o seu computador. Reinicie."
+                    </button>
+                    <button onclick="resolveScenario(2)" class="w-full text-left p-3 border rounded hover:bg-gray-50 transition text-sm">
+                        B) "Entendo sua frustração e a urgência desse email. Vamos resolver isso juntos agora. O senhor pode me descrever a mensagem de erro?"
+                    </button>
+                    <button onclick="resolveScenario(3)" class="w-full text-left p-3 border rounded hover:bg-gray-50 transition text-sm">
+                        C) "Vou abrir um chamado nível 2, aguarde 24 horas."
+                    </button>
+                </div>
+                <div id="scenario-feedback" class="hidden mt-4 p-4 rounded bg-gray-100 text-sm font-semibold"></div>
+            </div>
+        </section>
+
+        <!-- GLOSSARY -->
+        <section id="glossary" class="content-section max-w-4xl mx-auto">
+            <header class="mb-6">
+                <h2 class="text-3xl font-bold text-gray-900">Glossário Técnico</h2>
+                <input type="text" id="glossary-search" onkeyup="filterGlossary()" placeholder="Buscar termo (ex: SLA, ITIL)..." class="mt-4 w-full p-3 border border-gray-300 rounded shadow-sm focus:ring-2 focus:ring-teal-500 focus:outline-none">
+            </header>
+            
+            <div id="glossary-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 glossary-scroll h-[600px] overflow-y-auto pb-10">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+        
+        <!-- NEW FLASHCARDS SECTION -->
+        <section id="flashcards" class="content-section max-w-2xl mx-auto h-full flex flex-col items-center justify-start pt-8">
+            <header class="mb-8 text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Flashcards de Memorização</h2>
+                <p class="text-gray-600">Clique no cartão para ver a resposta.</p>
+            </header>
+
+            <div class="w-full relative">
+                <!-- Counter -->
+                <div class="absolute -top-10 right-0 font-mono text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                    <span id="fc-current">1</span> / <span id="fc-total">30</span>
+                </div>
+
+                <!-- Flashcard Scene -->
+                <div class="flashcard-scene mb-8">
+                    <div class="flashcard" id="card-element" onclick="flipCard()">
+                        <div class="flashcard-face flashcard-front">
+                            <span class="text-sm text-gray-400 uppercase tracking-widest absolute top-6">Tópico</span>
+                            <h3 class="text-2xl font-bold" id="fc-front-text">Carregando...</h3>
+                            <p class="text-xs text-gray-400 absolute bottom-6">Clique para virar</p>
+                        </div>
+                        <div class="flashcard-face flashcard-back">
+                            <span class="text-sm text-teal-200 uppercase tracking-widest absolute top-6">Definição / Resposta</span>
+                            <p class="text-lg leading-relaxed" id="fc-back-text">...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <button onclick="prevCard()" class="px-4 py-2 text-gray-600 hover:text-teal-700 hover:bg-teal-50 rounded transition font-medium">← Anterior</button>
+                    <button onclick="shuffleCards()" class="px-4 py-2 text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded transition font-medium flex items-center gap-2">
+                        <span>Embaralhar</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                    </button>
+                    <button onclick="nextCard()" class="px-4 py-2 text-gray-600 hover:text-teal-700 hover:bg-teal-50 rounded transition font-medium">Próximo →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIMULADO (QUIZ 50 QUESTÕES) -->
+        <section id="simulado" class="content-section max-w-4xl mx-auto">
+            
+            <!-- Sticky Score Header -->
+            <div class="sticky-score p-4 mb-6 shadow-md rounded-lg border border-gray-200 flex flex-wrap justify-between items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Simulado: Comunicação Técnica</h2>
+                    <p class="text-xs text-gray-500">Questões de A a E</p>
+                </div>
+                <div class="flex gap-4">
+                    <div class="text-center px-4 py-2 bg-green-50 rounded border border-green-200">
+                        <span class="block text-2xl font-bold text-green-700" id="score-correct">0</span>
+                        <span class="text-xs text-green-800 uppercase font-bold">Acertos</span>
+                    </div>
+                    <div class="text-center px-4 py-2 bg-red-50 rounded border border-red-200">
+                        <span class="block text-2xl font-bold text-red-700" id="score-wrong">0</span>
+                        <span class="text-xs text-red-800 uppercase font-bold">Erros</span>
+                    </div>
+                    <div class="text-center px-4 py-2 bg-gray-100 rounded border border-gray-200">
+                        <span class="block text-2xl font-bold text-gray-700" id="score-percent">0%</span>
+                        <span class="text-xs text-gray-600 uppercase font-bold">Aprov.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Questions Container -->
+            <div id="quiz-list" class="space-y-8 pb-12">
+                <!-- Populated by JS -->
+            </div>
+
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-12 mb-6 text-center text-gray-400 text-xs no-print">
+            <p>© 2025 Material de Estudo - CPU PE. Uso pessoal e educacional.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- Navigation Logic ---
+        function nav(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Deactivate all tabs
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('tab-inactive');
+            });
+
+            // Show target section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Activate target tab (Desktop)
+            const navBtn = document.getElementById('nav-' + sectionId);
+            if(navBtn) {
+                navBtn.classList.remove('tab-inactive');
+                navBtn.classList.add('tab-active');
+            }
+
+            // Mobile menu handling
+            document.getElementById('mobile-menu').classList.add('hidden');
+
+            // Render Charts only when section becomes visible (to ensure correct sizing)
+            if (sectionId === 'dashboard' && !window.chartTimeDistInstance) {
+                renderDashboardCharts();
+            }
+            if (sectionId === 'module1' && !window.chartBarriersInstance) {
+                renderModule1Charts();
+            }
+            if (sectionId === 'module3' && !window.plotlyRendered) {
+                renderPlotlyChart();
+                window.plotlyRendered = true;
+            }
+            
+            // Initialize Flashcards if accessing that section
+            if (sectionId === 'flashcards') {
+                updateFlashcardUI();
+            }
+        }
+
+        // --- Module 2: Interactive Parecer ---
+        function showParecerPart(partId) {
+            document.getElementById('parecer-placeholder').classList.add('hidden');
+            document.querySelectorAll('.parecer-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(partId).classList.remove('hidden');
+        }
+
+        // --- Module 3: Scenario Simulator ---
+        function resolveScenario(option) {
+            const feedbackEl = document.getElementById('scenario-feedback');
+            feedbackEl.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800');
+            
+            if (option === 2) {
+                feedbackEl.classList.add('bg-green-100', 'text-green-800');
+                feedbackEl.innerHTML = "✅ <strong>Correto!</strong> Esta resposta demonstra Empatia (valida o sentimento), Escuta Ativa e Foco na Solução. É a abordagem ideal para gestão de crises.";
+            } else if (option === 1) {
+                feedbackEl.classList.add('bg-red-100', 'text-red-800');
+                feedbackEl.innerHTML = "❌ <strong>Incorreto.</strong> Resposta defensiva e técnica demais. Culpar o usuário ('o problema é seu computador') escala o conflito.";
+            } else {
+                feedbackEl.classList.add('bg-red-100', 'text-red-800');
+                feedbackEl.innerHTML = "❌ <strong>Incorreto.</strong> Resposta burocrática. Embora seguir o processo seja importante, falta empatia imediata para acalmar o usuário irritado.";
+            }
+        }
+
+        // --- Glossary Data & Logic ---
+        const glossaryTerms = [
+            { term: "SLA", def: "Service Level Agreement. Acordo de Nível de Serviço. Define metas de tempo e qualidade (ex: responder em 4h)." },
+            { term: "Stakeholder", def: "Parte Interessada. Qualquer pessoa ou grupo afetado pelo projeto ou serviço de TI." },
+            { term: "ITIL", def: "Biblioteca de infraestrutura de TI. Conjunto de boas práticas para gerenciamento de serviços." },
+            { term: "Feedback Sandwich", def: "Técnica de comunicação: Elogio sincero, Ponto de melhoria (crítica), Encorajamento final." },
+            { term: "Escuta Ativa", def: "Técnica de comunicação onde se ouve para compreender, não apenas para responder. Envolve parafrasear e confirmar entendimento." },
+            { term: "Parecer Técnico", def: "Documento opinativo que fornece subsídios técnicos para uma decisão administrativa." },
+            { term: "Relatório de Incidente", def: "Documento descritivo pós-evento detalhando causa raiz, impacto e resolução." },
+            { term: "Metodologia Ágil", def: "Abordagem de gestão (ex: Scrum) que valoriza 'indivíduos e interações mais que processos e ferramentas'." },
+            { term: "Ruído Semântico", def: "Barreira de comunicação causada pelo uso de palavras com significados diferentes para emissor e receptor (ex: jargões)." },
+            { term: "PDTI", def: "Plano Diretor de Tecnologia da Informação. Instrumento de diagnóstico, planejamento e gestão dos recursos de TI." },
+            { term: "Taxonomia", def: "Classificação sistemática. Em TI, usada para organizar incidentes, ativos ou conhecimento." },
+            { term: "Soft Skills", def: "Habilidades comportamentais e interpessoais, como comunicação, liderança e empatia." }
+        ];
+
+        function renderGlossary(filter = "") {
+            const list = document.getElementById('glossary-list');
+            list.innerHTML = "";
+            const filtered = glossaryTerms.filter(t => t.term.toLowerCase().includes(filter.toLowerCase()) || t.def.toLowerCase().includes(filter.toLowerCase()));
+            
+            filtered.forEach(item => {
+                const el = document.createElement('div');
+                el.className = "bg-white p-4 rounded border border-gray-200 hover:shadow-md transition";
+                el.innerHTML = `<h4 class="font-bold text-teal-700">${item.term}</h4><p class="text-sm text-gray-600 mt-1">${item.def}</p>`;
+                list.appendChild(el);
+            });
+        }
+
+        function filterGlossary() {
+            const val = document.getElementById('glossary-search').value;
+            renderGlossary(val);
+        }
+
+        // --- FLASHCARDS LOGIC ---
+        let currentCardIndex = 0;
+        let isCardFlipped = false;
+        
+        const flashcardsData = [
+            { q: "Ruído Semântico", a: "Barreira de comunicação causada quando as palavras usadas (jargões, siglas) não são compreendidas pelo receptor." },
+            { q: "Feedback Sandwich", a: "Técnica de feedback construtivo: Elogio (Pão), Crítica/Melhoria (Recheio), Encorajamento/Elogio (Pão)." },
+            { q: "SLA (Service Level Agreement)", a: "Acordo formal entre TI e cliente que define metas de nível de serviço, prazos e responsabilidades." },
+            { q: "Parecer Técnico", a: "Documento opinativo que analisa tecnicamente uma demanda e recomenda (defere/indefere) uma decisão administrativa." },
+            { q: "Escuta Ativa", a: "Ouvir com total atenção, sem interromper, validando o entendimento e demonstrando empatia pelo interlocutor." },
+            { q: "Princípio da Impessoalidade", a: "Na redação oficial, focar nos fatos e no cargo, evitando opiniões pessoais, subjetividade ou promoção pessoal." },
+            { q: "Stakeholder", a: "Qualquer indivíduo ou grupo que possa afetar ou ser afetado por um projeto ou serviço de TI." },
+            { q: "CNV (Comunicação Não-Violenta)", a: "Metodologia focada em expressar sentimentos e necessidades sem julgamentos, visando resolver conflitos." },
+            { q: "Daily Scrum", a: "Reunião diária de 15 min para sincronizar atividades e identificar impedimentos. Não é para resolução técnica complexa." },
+            { q: "Relatório vs. Parecer", a: "Relatório apenas descreve fatos/histórico (neutro). Parecer analisa e emite opinião fundamentada (argumentativo)." },
+            { q: "Voz Passiva em Documentos", a: "Usada para dar impessoalidade e focar na ação/fato, não no agente (Ex: 'Verificou-se o erro' em vez de 'Eu vi o erro')." },
+            { q: "Concisão", a: "Qualidade de transmitir a mensagem completa com o mínimo de palavras possível, sem perder a clareza." },
+            { q: "Netiqueta", a: "Conjunto de normas de conduta e polidez para comunicação na internet (ex: não usar Caps Lock)." },
+            { q: "Service Desk (ITIL)", a: "Ponto único de contato (SPOC) entre o provedor de serviço e os usuários." },
+            { q: "Gestão de Crise", a: "Comunicação proativa, transparente e rápida durante incidentes críticos para mitigar danos à reputação e confiança." },
+            { q: "Linguagem Corporal", a: "Comunicação não-verbal (postura, gestos) que pode reforçar ou contradizer a mensagem verbal." },
+            { q: "Vocativo", a: "Termo usado para chamar ou interpelar o destinatário no início de uma correspondência (Ex: Prezado Senhor)." },
+            { q: "Ementa", a: "Resumo no cabeçalho de um documento oficial que permite identificar rapidamente o assunto tratado." },
+            { q: "Ata de Reunião", a: "Registro formal e sucinto de tudo o que foi discutido, decidido e encaminhado em uma reunião." },
+            { q: "Sprint Retrospective", a: "Evento Scrum focado na melhoria do processo e das interações da equipe (lições aprendidas)." },
+            { q: "Comunicação Assíncrona", a: "Interação onde resposta não é imediata (Email, Ticket), permitindo reflexão e documentação." },
+            { q: "LGPD", a: "Lei que exige transparência e segurança na comunicação e tratamento de dados pessoais de cidadãos." },
+            { q: "Stakeholder Alto Poder / Baixo Interesse", a: "Deve ser 'Mantido Satisfeito'. Não precisa de detalhes excessivos, mas deve estar feliz com o resultado." },
+            { q: "Stakeholder Alto Poder / Alto Interesse", a: "Deve ser 'Gerenciado de Perto'. Exige comunicação constante e detalhada." },
+            { q: "Cópia Oculta (Cco/Bcc)", a: "Recurso de e-mail para proteger a privacidade dos endereços dos destinatários em envios em massa." },
+            { q: "Troubleshooting", a: "Processo lógico e sistemático de busca e eliminação de causas para resolver problemas técnicos." },
+            { q: "KCS (Knowledge-Centered Service)", a: "Metodologia onde a criação de conhecimento (documentação) é integrada ao processo de resolução de problemas." },
+            { q: "Rapport", a: "Técnica para criar uma conexão de empatia e sintonia com outra pessoa, facilitando a comunicação." },
+            { q: "Ruído Fisiológico", a: "Barreira de comunicação interna do corpo (fome, dor de cabeça, cansaço) que impede a atenção plena." },
+            { q: "Comunicação Síncrona", a: "Ocorre em tempo real (Telefone, Videoconferência). Boa para urgências e brainstorming." }
+        ];
+
+        function updateFlashcardUI() {
+            const cardEl = document.getElementById('card-element');
+            const frontEl = document.getElementById('fc-front-text');
+            const backEl = document.getElementById('fc-back-text');
+            const counterEl = document.getElementById('fc-current');
+            const totalEl = document.getElementById('fc-total');
+
+            // Reset flip
+            cardEl.classList.remove('is-flipped');
+            isCardFlipped = false;
+
+            // Wait a tiny bit for flip reset before changing text if it was flipped, 
+            // but for simple nav, direct update is fine.
+            setTimeout(() => {
+                frontEl.innerText = flashcardsData[currentCardIndex].q;
+                backEl.innerText = flashcardsData[currentCardIndex].a;
+                counterEl.innerText = currentCardIndex + 1;
+                totalEl.innerText = flashcardsData.length;
+            }, 150);
+        }
+
+        function flipCard() {
+            const cardEl = document.getElementById('card-element');
+            isCardFlipped = !isCardFlipped;
+            cardEl.classList.toggle('is-flipped');
+        }
+
+        function nextCard() {
+            if (currentCardIndex < flashcardsData.length - 1) {
+                currentCardIndex++;
+                updateFlashcardUI();
+            } else {
+                // Loop back to start? Or stop? Let's loop.
+                currentCardIndex = 0;
+                updateFlashcardUI();
+            }
+        }
+
+        function prevCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                updateFlashcardUI();
+            } else {
+                currentCardIndex = flashcardsData.length - 1;
+                updateFlashcardUI();
+            }
+        }
+
+        function shuffleCards() {
+            // Fisher-Yates shuffle
+            for (let i = flashcardsData.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [flashcardsData[i], flashcardsData[j]] = [flashcardsData[j], flashcardsData[i]];
+            }
+            currentCardIndex = 0;
+            updateFlashcardUI();
+        }
+
+        // --- 50 Questions Data & Logic ---
+        const quizQuestions = [
+            {
+                q: "Qual dos documentos abaixo tem caráter eminentemente opinativo e serve para subsidiar uma tomada de decisão administrativa?",
+                opt: ["Relatório de Visita Técnica", "Parecer Técnico", "Log de Servidor", "Manual do Usuário", "Ata de Reunião"],
+                correct: 1,
+                desc: "O Parecer Técnico é o único documento que emite juízo de valor fundamentado (opinião) para orientar decisões."
+            },
+            {
+                q: "Em um e-mail técnico para um usuário leigo, qual a melhor prática para garantir a compreensão?",
+                opt: ["Usar termos em inglês para demonstrar conhecimento.", "Explicar o problema utilizando analogias simples e evitando jargões.", "Anexar logs do sistema sem explicação.", "Escrever em caixa alta para destacar a importância.", "Usar apenas acrônimos técnicos (DNS, DHCP)."],
+                correct: 1,
+                desc: "A adaptação da linguagem ao receptor (clareza) é essencial para evitar ruídos semânticos."
+            },
+            {
+                q: "Segundo a norma culta e o princípio da impessoalidade, qual frase é adequada para um Relatório Técnico?",
+                opt: ["Eu acho que o servidor travou por calor.", "Nós sentimos que a rede está lenta.", "Verificou-se instabilidade no cluster devido à alta temperatura.", "Achei o erro gravíssimo.", "O usuário fez besteira na configuração."],
+                correct: 2,
+                desc: "A voz passiva ou impessoal ('Verificou-se') foca no fato, não no autor, respeitando a impessoalidade."
+            },
+            {
+                q: "O que caracteriza a 'Escuta Ativa' no atendimento de TI?",
+                opt: ["Interromper o usuário para dar a solução rápida.", "Ouvir enquanto mexe no celular.", "Parafrasear o que o usuário disse para confirmar o entendimento antes de agir.", "Ignorar as reclamações emocionais.", "Ouvir apenas as palavras chaves técnicas."],
+                correct: 2,
+                desc: "Escuta Ativa envolve validar o entendimento repetindo o que foi dito com suas próprias palavras."
+            },
+            {
+                q: "No contexto do Scrum, qual evento é destinado à sincronização diária da equipe e identificação de impedimentos?",
+                opt: ["Sprint Review", "Sprint Planning", "Daily Scrum", "Sprint Retrospective", "Backlog Refinement"],
+                correct: 2,
+                desc: "A Daily Scrum é uma reunião de 15 minutos para alinhamento diário."
+            },
+            {
+                q: "Qual é o principal objetivo de um SLA (Acordo de Nível de Serviço)?",
+                opt: ["Punir a equipe de TI.", "Definir expectativas claras de prazos e qualidade entre prestador e cliente.", "Aumentar o custo do contrato.", "Documentar o código fonte.", "Impedir que o usuário abra chamados."],
+                correct: 1,
+                desc: "O SLA serve para alinhar expectativas e garantir a qualidade acordada do serviço."
+            },
+            {
+                q: "O que é 'Ruído Semântico' na comunicação técnica?",
+                opt: ["Barulho físico na sala do servidor.", "Interferência eletromagnética no cabo de rede.", "Mal-entendido causado pelo uso de palavras com significados diferentes para as partes (ex: jargões).", "Erro de digitação.", "Falha no hardware de comunicação."],
+                correct: 2,
+                desc: "Ruído semântico ocorre quando a linguagem usada não é compreendida pelo receptor."
+            },
+            {
+                q: "Ao redigir um documento oficial, a concisão significa:",
+                opt: ["Escrever o mínimo possível, omitindo detalhes importantes.", "Transmitir a mensagem completa com o mínimo de palavras necessárias, sem redundâncias.", "Usar fontes pequenas para caber em uma página.", "Resumir tudo em uma linha.", "Não usar pontuação."],
+                correct: 1,
+                desc: "Concisão é a arte de dizer muito com poucas palavras, sem perder a clareza ou o conteúdo."
+            },
+            {
+                q: "Qual a atitude correta ao receber um feedback negativo de um usuário irritado?",
+                opt: ["Discutir e provar que ele está errado.", "Ignorar e encerrar o chamado.", "Praticar empatia, manter a calma e focar na resolução do problema.", "Culpar outro departamento.", "Rir da situação."],
+                correct: 2,
+                desc: "Inteligência emocional e foco na solução são essenciais na gestão de conflitos."
+            },
+            {
+                q: "A seção 'Ementa' de um Parecer Técnico serve para:",
+                opt: ["Contar a história do projeto.", "Resumir o assunto, os interessados e as palavras-chave do documento.", "Listar as referências bibliográficas.", "Assinar o documento.", "Colocar a data de validade."],
+                correct: 1,
+                desc: "A Ementa é o resumo inicial que permite identificar rapidamente o teor do documento."
+            },
+            {
+                q: "Na comunicação não-violenta (CNV), o primeiro passo é:",
+                opt: ["Julgar o erro.", "Observar os fatos sem avaliar.", "Exigir uma mudança.", "Expressar raiva.", "Pedir desculpas falsas."],
+                correct: 1,
+                desc: "A observação isenta de julgamento é a base da CNV."
+            },
+            {
+                q: "Um relatório de 'Post-Mortem' ou 'RCA' (Root Cause Analysis) tem como objetivo:",
+                opt: ["Encontrar um culpado para demitir.", "Documentar o incidente, entender a causa raiz e prevenir recorrência.", "Elogiar a equipe.", "Criar burocracia desnecessária.", "Vender novos equipamentos."],
+                correct: 1,
+                desc: "O foco é aprendizado e prevenção, não punição."
+            },
+            {
+                q: "Qual destas NÃO é uma barreira à comunicação eficaz?",
+                opt: ["Filtragem (manipulação da informação).", "Sobrecarga de informação.", "Feedback construtivo e oportuno.", "Defensividade.", "Linguagem excessivamente técnica."],
+                correct: 2,
+                desc: "Feedback construtivo MELHORA a comunicação, não é uma barreira."
+            },
+            {
+                q: "Para garantir a 'Clareza' em um tutorial para usuários, deve-se:",
+                opt: ["Usar parágrafos longos e sem quebras.", "Utilizar prints de tela (screenshots) e passos numerados.", "Omitir passos óbvios.", "Usar fonte cursiva.", "Escrever em outro idioma."],
+                correct: 1,
+                desc: "Recursos visuais e estrutura em passos facilitam a instrução."
+            },
+            {
+                q: "O princípio da 'Publicidade' na administração pública implica que:",
+                opt: ["Todo documento deve ser publicado no Facebook.", "Os atos administrativos devem ser transparentes e acessíveis, salvo sigilo legal.", "Deve-se fazer propaganda do governo.", "Os documentos não precisam de data.", "Tudo deve ser verbal."],
+                correct: 1,
+                desc: "Publicidade refere-se à transparência dos atos administrativos."
+            },
+            {
+                q: "Em uma matriz de partes interessadas (Stakeholders), aqueles com 'Alto Poder' e 'Alto Interesse' devem ser:",
+                opt: ["Apenas monitorados.", "Mantidos informados.", "Gerenciados de perto e engajados ativamente.", "Ignorados.", "Tratados como baixo risco."],
+                correct: 2,
+                desc: "São os stakeholders críticos para o sucesso do projeto."
+            },
+            {
+                q: "Qual termo define a capacidade de se colocar no lugar do outro e compreender seus sentimentos?",
+                opt: ["Simpatia", "Empatia", "Apatia", "Telepatia", "Antipatia"],
+                correct: 1,
+                desc: "Empatia é fundamental no atendimento ao usuário."
+            },
+            {
+                q: "Qual a melhor forma de comunicar um atraso crítico em um projeto para a diretoria?",
+                opt: ["Esconder até o último dia.", "Enviar um e-mail longo e confuso.", "Comunicar o quanto antes, explicando as causas, impactos e o novo plano de ação.", "Culpar o fornecedor e lavar as mãos.", "Não comunicar."],
+                correct: 2,
+                desc: "Transparência e proatividade na gestão de problemas geram confiança."
+            },
+            {
+                q: "Em documentos técnicos, o uso de 'Voz Ativa' (ex: 'O sistema processou os dados') é preferível quando:",
+                opt: ["Se deseja ocultar o sujeito.", "Se quer destacar quem realizou a ação para dar clareza e responsabilidade.", "Nunca se deve usar voz ativa.", "O documento é informal.", "Se quer ser poético."],
+                correct: 1,
+                desc: "A voz ativa é mais direta e clara sobre quem fez o quê."
+            },
+            {
+                q: "O 'Jargão' técnico deve ser utilizado:",
+                opt: ["Sempre, para mostrar sabedoria.", "Apenas entre pares técnicos que dominam a mesma terminologia.", "Em manuais para idosos.", "Na comunicação com a imprensa.", "Em reuniões com o financeiro."],
+                correct: 1,
+                desc: "O jargão agiliza a comunicação entre especialistas, mas é ruído para leigos."
+            },
+            {
+                q: "Qual é a função do 'Vocativo' em um e-mail formal?",
+                opt: ["Despedir-se.", "Chamar ou invocar o destinatário (ex: Prezado Senhor).", "Assinar o texto.", "Listar anexos.", "Resumir o assunto."],
+                correct: 1,
+                desc: "Vocativo é a forma de tratamento inicial."
+            },
+            {
+                q: "Um 'Glossário' em um documento técnico serve para:",
+                opt: ["Aumentar o número de páginas.", "Definir termos técnicos e siglas utilizados no texto, facilitando a leitura.", "Listar os autores.", "Fazer agradecimentos.", "Inserir imagens."],
+                correct: 1,
+                desc: "O glossário democratiza o acesso ao conhecimento técnico do documento."
+            },
+            {
+                q: "No atendimento via chat, o uso de CAIXA ALTA (Caps Lock) é interpretado como:",
+                opt: ["Destaque importante.", "Grito ou agressividade.", "Sussurro.", "Alegria.", "Formalidade."],
+                correct: 1,
+                desc: "Na etiqueta da internet (Netiqueta), caixa alta equivale a gritar."
+            },
+            {
+                q: "A comunicação 'Assíncrona' é aquela que:",
+                opt: ["Acontece em tempo real (ex: telefone).", "Não requer que as partes estejam conectadas ao mesmo tempo (ex: e-mail, ticket).", "Não usa tecnologia.", "É feita por sinais de fumaça.", "É sempre falada."],
+                correct: 1,
+                desc: "Ferramentas assíncronas permitem gestão do tempo e documentação."
+            },
+            {
+                q: "Qual destas é uma característica de uma equipe de alta performance em comunicação?",
+                opt: ["Fofoca nos corredores.", "Feedback constante, aberto e respeitoso.", "Silêncio total durante o trabalho.", "Reuniões de 4 horas diárias.", "Cada um trabalha por si."],
+                correct: 1,
+                desc: "Feedback fluido é a base da melhoria contínua."
+            },
+            {
+                q: "A sigla LGPD refere-se a:",
+                opt: ["Lei Geral de Proteção de Dados.", "Lei Geral de Protocolos Digitais.", "Logística Geral de Processamento de Dados.", "Linguagem Geral de Programação Dinâmica.", "Lei de Gestão Para Diretores."],
+                correct: 0,
+                desc: "A LGPD regula o tratamento de dados pessoais."
+            },
+            {
+                q: "Ao escrever um Parecer Técnico, a 'Fundamentação' deve basear-se em:",
+                opt: ["Achismos do autor.", "Apenas na experiência pessoal.", "Normas técnicas, leis, editais e dados concretos.", "Opinião de amigos.", "Wikipédia."],
+                correct: 2,
+                desc: "A fundamentação dá validade jurídica e técnica ao parecer."
+            },
+            {
+                q: "O que é 'Assertividade' na comunicação?",
+                opt: ["Ser agressivo e impor sua vontade.", "Ser passivo e aceitar tudo.", "Expressar suas ideias e sentimentos de forma direta, honesta e respeitosa.", "Falar muito alto.", "Falar muito baixo."],
+                correct: 2,
+                desc: "Assertividade é o equilíbrio entre passividade e agressividade."
+            },
+            {
+                q: "Em uma videoconferência de trabalho, é boa prática:",
+                opt: ["Deixar o microfone aberto com ruído de fundo.", "Testar áudio/vídeo antes e mutar o microfone quando não estiver falando.", "Comer durante a fala dos outros.", "Interromper constantemente.", "Não prestar atenção."],
+                correct: 1,
+                desc: "Mutar o microfone evita ruídos e demonstra respeito."
+            },
+            {
+                q: "O termo 'Stakeholder' pode ser traduzido como:",
+                opt: ["Acionista apenas.", "Parte Interessada ou Interveniente.", "Gerente de Projeto.", "Cliente final.", "Programador."],
+                correct: 1,
+                desc: "Stakeholder engloba todos os afetados pelo projeto."
+            },
+            {
+                q: "A estrutura de um e-mail profissional deve conter:",
+                opt: ["Assunto vago, Texto longo, Sem assinatura.", "Assunto claro, Saudação, Corpo conciso, Despedida e Assinatura completa.", "Apenas o anexo.", "Gírias e emojis em excesso.", "Texto todo colorido."],
+                correct: 1,
+                desc: "Estrutura padrão garante legibilidade e profissionalismo."
+            },
+            {
+                q: "Qual a função da 'Ata de Reunião'?",
+                opt: ["Servir de rascunho.", "Registrar formalmente as discussões, decisões e responsáveis definidos em uma reunião.", "Avaliar o desempenho dos funcionários.", "Agendar a próxima festa.", "Nenhuma função específica."],
+                correct: 1,
+                desc: "A ata é a memória oficial das decisões tomadas."
+            },
+            {
+                q: "Feedback 'Sandwich' consiste em:",
+                opt: ["Elogio, Crítica, Elogio.", "Crítica, Elogio, Crítica.", "Apenas Críticas.", "Apenas Elogios.", "Falar sobre comida."],
+                correct: 0,
+                desc: "A técnica visa tornar a crítica mais palatável e construtiva."
+            },
+            {
+                q: "Na gestão de conflitos, a técnica de 'Negociação Integrativa' busca:",
+                opt: ["Que um lado ganhe e o outro perca (Ganha-Perde).", "Que ambos os lados percam.", "Uma solução onde ambas as partes saiam satisfeitas (Ganha-Ganha).", "Ignorar o conflito.", "Impor a autoridade."],
+                correct: 2,
+                desc: "A negociação integrativa foca em interesses comuns e valor mútuo."
+            },
+            {
+                q: "Um Manual de Usuário bem escrito deve focar em:",
+                opt: ["Descrever como o código foi feito.", "Explicar as tarefas que o usuário precisa realizar (Task-oriented).", "Elogiar os desenvolvedores.", "Usar termos complexos de banco de dados.", "Ser o mais curto possível, mesmo que confuso."],
+                correct: 1,
+                desc: "O usuário quer saber 'como fazer X', não 'como X funciona internamente'."
+            },
+            {
+                q: "O que é 'Netiqueta'?",
+                opt: ["Etiqueta em redes de computadores.", "Conjunto de boas maneiras e normas de conduta na comunicação online.", "Um protocolo de rede.", "Uma marca de roteador.", "Um tipo de vírus."],
+                correct: 1,
+                desc: "São as normas sociais da internet."
+            },
+            {
+                q: "A comunicação não-verbal (gestos, postura) representa:",
+                opt: ["Nada na comunicação.", "Menos de 10% da mensagem.", "Uma parte significativa da mensagem, podendo contradizer a fala.", "Apenas enfeite.", "Tudo na comunicação."],
+                correct: 2,
+                desc: "Estudos indicam que a linguagem corporal comunica muito sobre intenção e emoção."
+            },
+            {
+                q: "Em um relatório, gráficos e tabelas servem para:",
+                opt: ["Ocupar espaço.", "Deixar o documento colorido.", "Sintetizar dados complexos facilitando a análise visual.", "Confundir o leitor.", "Substituir todo o texto."],
+                correct: 2,
+                desc: "Visualização de dados agiliza a compreensão de tendências e comparações."
+            },
+            {
+                q: "O canal de comunicação mais rico (com mais pistas sociais) é:",
+                opt: ["E-mail.", "Mensagem de texto.", "Relatório impresso.", "Comunicação face a face (presencial ou vídeo).", "Cartaz."],
+                correct: 3,
+                desc: "Permite ver expressões, ouvir tom de voz e ter feedback imediato."
+            },
+            {
+                q: "Ao enviar um e-mail com cópia oculta (Cco/Bcc), os destinatários:",
+                opt: ["Veem todos os emails da lista.", "Não veem quem mais recebeu a mensagem no campo Cco.", "Recebem o e-mail duplicado.", "Sabem que é spam.", "Não recebem o anexo."],
+                correct: 1,
+                desc: "O Cco preserva a privacidade dos endereços de e-mail."
+            },
+            {
+                q: "Qual a importância da 'Revisão' antes de enviar um documento técnico?",
+                opt: ["Nenhuma, o corretor automático resolve.", "Garantir a correção gramatical, clareza e precisão técnica, evitando erros que minam a credibilidade.", "Atrasar o envio.", "Mostrar para o chefe.", "Mudar o conteúdo."],
+                correct: 1,
+                desc: "Erros em documentos técnicos podem gerar prejuízos e perda de confiança."
+            },
+            {
+                q: "Em TI, o termo 'Troubleshooting' refere-se a:",
+                opt: ["Criar problemas.", "Processo sistemático de identificação e correção de falhas.", "Treinamento de usuários.", "Venda de software.", "Apagar arquivos."],
+                correct: 1,
+                desc: "É a metodologia de diagnóstico e resolução de problemas."
+            },
+            {
+                q: "Um documento confidencial vazado viola qual pilar da segurança?",
+                opt: ["Disponibilidade.", "Integridade.", "Confidencialidade.", "Autenticidade.", "Irretratabilidade."],
+                correct: 2,
+                desc: "Confidencialidade garante que a info só é acessada por quem tem autorização."
+            },
+            {
+                q: "A frase 'O servidor foi reiniciado pelo operador' está na voz:",
+                opt: ["Ativa.", "Passiva.", "Reflexiva.", "Imperativa.", "Subjuntiva."],
+                correct: 1,
+                desc: "O sujeito (servidor) sofre a ação. Foco no fato, não no agente."
+            },
+            {
+                q: "Na comunicação escrita, o uso excessivo de adjetivos (ex: 'sistema maravilhoso', 'falha terrível'):",
+                opt: ["É recomendado para dar emoção.", "Deve ser evitado em textos técnicos, pois reduz a objetividade.", "Ajuda a vender o projeto.", "Mostra criatividade.", "É obrigatório em pareceres."],
+                correct: 1,
+                desc: "Textos técnicos devem ser sóbrios e factuais."
+            },
+            {
+                q: "O 'Kanban' facilita a comunicação da equipe através de:",
+                opt: ["Muitos relatórios escritos.", "Gestão Visual do fluxo de trabalho (quadro com colunas).", "Reuniões longas.", "Emails diários.", "Sinais sonoros."],
+                correct: 1,
+                desc: "O quadro Kanban torna o status do trabalho visível para todos instantaneamente."
+            },
+            {
+                q: "Qual a melhor abordagem para comunicar uma mudança complexa de processo para a equipe?",
+                opt: ["Mandar um e-mail longo.", "Fazer uma apresentação interativa, explicar o 'porquê', tirar dúvidas e fornecer documentação de apoio.", "Colocar um aviso na parede.", "Não avisar e deixar descobrirem.", "Falar apenas com um funcionário."],
+                correct: 1,
+                desc: "Gestão da mudança exige comunicação multimodal e suporte."
+            },
+            {
+                q: "A 'Base de Conhecimento' (Knowledge Base) serve para:",
+                opt: ["Guardar arquivos pessoais.", "Centralizar e compartilhar soluções conhecidas, reduzindo o tempo de atendimento.", "Fazer backup do servidor.", "Monitorar a rede.", "Escrever reclamações."],
+                correct: 1,
+                desc: "Promove o autoatendimento e padroniza a resolução de problemas."
+            },
+            {
+                q: "Em um Parecer, se o técnico não tem certeza sobre a conclusão, ele deve:",
+                opt: ["Chutar uma resposta.", "Omitir a dúvida.", "Solicitar diligências ou mais informações antes de concluir.", "Copiar o parecer de outro processo.", "Negar o pedido sem motivo."],
+                correct: 2,
+                desc: "A prudência técnica exige que se tenha dados suficientes para opinar."
+            },
+            {
+                q: "O principal objetivo da Comunicação Técnica é:",
+                opt: ["Entreter o leitor.", "Transmitir informações complexas de forma clara, precisa e útil para o público-alvo.", "Mostrar erudição.", "Confundir a concorrência.", "Vender produtos."],
+                correct: 1,
+                desc: "O foco é a utilidade e a transmissão eficaz do conhecimento."
+            }
+        ];
+
+        let quizScore = { correct: 0, wrong: 0 };
+        const answeredQuestions = new Set();
+
+        function renderQuiz() {
+            const list = document.getElementById('quiz-list');
+            list.innerHTML = "";
+            
+            quizQuestions.forEach((item, index) => {
+                const qEl = document.createElement('div');
+                qEl.className = "bg-white p-6 rounded shadow border border-gray-200 transition duration-300";
+                qEl.id = `q-card-${index}`;
+                
+                let optionsHtml = "";
+                const letters = ['A', 'B', 'C', 'D', 'E'];
+                
+                item.opt.forEach((optText, optIndex) => {
+                    optionsHtml += `
+                        <button onclick="checkAnswer(${index}, ${optIndex})" id="btn-${index}-${optIndex}" class="option-btn w-full text-left p-3 border rounded mb-2 hover:bg-gray-50 flex items-start gap-3">
+                            <span class="font-bold text-gray-500 min-w-[20px]">${letters[optIndex]})</span>
+                            <span>${optText}</span>
+                        </button>
+                    `;
+                });
+
+                qEl.innerHTML = `
+                    <p class="font-bold text-gray-800 mb-4 text-lg"><span class="text-teal-600">Questão ${index + 1}:</span> ${item.q}</p>
+                    <div class="space-y-1 mb-4">
+                        ${optionsHtml}
+                    </div>
+                    <div id="feedback-${index}" class="hidden p-4 rounded text-sm bg-gray-100 border-l-4"></div>
+                `;
+                list.appendChild(qEl);
+            });
+        }
+
+        function checkAnswer(qIndex, optIndex) {
+            if (answeredQuestions.has(qIndex)) return; 
+            answeredQuestions.add(qIndex);
+
+            const question = quizQuestions[qIndex];
+            const isCorrect = (optIndex === question.correct);
+            const feedbackEl = document.getElementById(`feedback-${qIndex}`);
+            const btnSelected = document.getElementById(`btn-${qIndex}-${optIndex}`);
+            const btnCorrect = document.getElementById(`btn-${qIndex}-${question.correct}`);
+
+            if (isCorrect) {
+                btnSelected.classList.add('option-correct');
+                feedbackEl.classList.add('border-green-500', 'bg-green-50', 'text-green-800');
+                feedbackEl.innerHTML = `<strong>Correto!</strong> ${question.desc}`;
+                quizScore.correct++;
+            } else {
+                btnSelected.classList.add('option-wrong');
+                btnCorrect.classList.add('option-correct');
+                feedbackEl.classList.add('border-red-500', 'bg-red-50', 'text-red-800');
+                feedbackEl.innerHTML = `<strong>Incorreto.</strong> A resposta certa é a alternativa <strong>${['A','B','C','D','E'][question.correct]}</strong>.<br><span class="text-xs mt-1 block">${question.desc}</span>`;
+                quizScore.wrong++;
+            }
+
+            feedbackEl.classList.remove('hidden');
+
+            for(let i=0; i<5; i++) {
+                const btn = document.getElementById(`btn-${qIndex}-${i}`);
+                btn.disabled = true;
+                if(i !== optIndex && i !== question.correct) {
+                    btn.classList.add('opacity-50');
+                }
+            }
+
+            updateScoreboard();
+        }
+
+        function updateScoreboard() {
+            document.getElementById('score-correct').textContent = quizScore.correct;
+            document.getElementById('score-wrong').textContent = quizScore.wrong;
+            
+            const total = quizScore.correct + quizScore.wrong;
+            const percent = total === 0 ? 0 : Math.round((quizScore.correct / total) * 100);
+            
+            document.getElementById('score-percent').textContent = `${percent}%`;
+        }
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGlossary();
+            renderQuiz();
+            
+            if(window.innerWidth >= 768) {
+                renderDashboardCharts();
+            }
+        });
+
+        // Charts Implementation (Existing)
+        function renderDashboardCharts() {
+            const ctxTime = document.getElementById('chartTimeDist').getContext('2d');
+            window.chartTimeDistInstance = new Chart(ctxTime, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Comunicação/Reuniões', 'Análise Técnica/Coding', 'Administrativo'],
+                    datasets: [{
+                        data: [70, 20, 10],
+                        backgroundColor: ['#0F766E', '#D97706', '#E5E7EB'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderModule1Charts() {
+            const ctxBarriers = document.getElementById('chartBarriers').getContext('2d');
+            window.chartBarriersInstance = new Chart(ctxBarriers, {
+                type: 'bar',
+                data: {
+                    labels: ['Semântica (Jargão)', 'Psicológica (Preconceito)', 'Física (Ruído/Ambiente)', 'Fisiológica (Cansaço)'],
+                    datasets: [{
+                        label: 'Frequência de Incidência em TI',
+                        data: [85, 60, 40, 30],
+                        backgroundColor: ['#0F766E', '#14B8A6', '#5EEAD4', '#CCFBF1'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+
+        function renderPlotlyChart() {
+            const trace1 = {
+                x: [1, 1, 9, 9],
+                y: [1, 9, 1, 9],
+                mode: 'markers+text',
+                type: 'scatter',
+                text: ['Monitorar (Baixo Poder/Interesse)', 'Manter Satisfeito (Alto Poder/Baixo Int.)', 'Manter Informado (Baixo Poder/Alto Int.)', 'Gerenciar de Perto (Chave)'],
+                textposition: 'top center',
+                marker: { size: [30, 40, 40, 50], color: ['#E5E7EB', '#FCD34D', '#5EEAD4', '#0F766E'] }
+            };
+
+            const layout = {
+                title: 'Matriz de Poder x Interesse',
+                xaxis: { title: 'Interesse do Stakeholder', range: [0, 10], showgrid: false },
+                yaxis: { title: 'Poder de Influência', range: [0, 10], showgrid: false },
+                shapes: [
+                    { type: 'line', x0: 5, y0: 0, x1: 5, y1: 10, line: { color: 'gray', width: 1, dash: 'dot' } },
+                    { type: 'line', x0: 0, y0: 5, x1: 10, y1: 5, line: { color: 'gray', width: 1, dash: 'dot' } }
+                ],
+                margin: { t: 40, r: 20, b: 40, l: 50 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+
+            Plotly.newPlot('plotlyStakeholder', [trace1], layout, {displayModeBar: false, responsive: true});
+        }
+
+    </script>
+</body>
+</html>
